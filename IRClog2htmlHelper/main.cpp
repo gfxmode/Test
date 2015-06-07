@@ -14,7 +14,6 @@
 #include <QDirIterator>
 #include <QProcess>
 #include <QDateTime>
-#include <QDebug>
 
 #define IRSSI_LOG_FOLDER_PATH "/var/log/irssi/"
 
@@ -30,9 +29,6 @@ int main(int argc, char *argv[])
     QProcess proc;
     QString strCMD;
 
-    proc.start("echo \"hello world\" >> \/home\/john\/1.txt");
-    proc.waitForFinished(1000);
-
     // Step1: get folder name start with "#"
     getIrssiLogFolderName(lsIrssiLogFolderName);
 
@@ -46,7 +42,6 @@ int main(int argc, char *argv[])
             strCMD = "irclog2html " + convertAllLogToHtml(lsIrssiLogFolderName);
             if(strCMD.length() > 12)
             {
-                qDebug() << "Step2: convertAllLogToHtml. With CMD" + strCMD;
                 proc.start(strCMD);
                 proc.waitForFinished(1000);
             }
@@ -57,7 +52,6 @@ int main(int argc, char *argv[])
     strCMD = "irclog2html " + convertTodayLogToHtml(lsIrssiLogFolderName);
     if(strCMD.length() > 12)
     {
-        qDebug() << "Step3: convertTodayLogToHtml. With CMD" + strCMD;
         proc.start(strCMD);
         proc.waitForFinished(1000);
     }
@@ -119,21 +113,18 @@ QString convertTodayLogToHtml(const QList<QString> &lsFolderName)
 {
     QDateTime now = QDateTime::currentDateTime();
     QString strTodayLogName = now.toString("yyyy-MM-dd.log");
-    QString strFolderPath;
-    QStringList lsStrFileName;
+    QString strFilePath;
+    QFileInfo fileInfo;
     QString strFileToConvert = "";
 
     for(int i = 0; i < lsFolderName.size(); i++)
     {
-        strFolderPath = lsFolderName.at(i);
-        QDir dir(strFolderPath);
-        dir.setFilter(QDir::Files | QDir::NoSymLinks);
-        lsStrFileName = dir.entryList();
-
-        if(lsStrFileName.contains(strTodayLogName))
+        strFilePath = lsFolderName.at(i) + '/' + strTodayLogName;
+        fileInfo.setFile(strFilePath);
+        if(fileInfo.isFile())
         {
             // make abslute file path
-            strFileToConvert += strFolderPath + '/' + strTodayLogName+ " ";
+            strFileToConvert += strFilePath + " ";
         }
     }
 
