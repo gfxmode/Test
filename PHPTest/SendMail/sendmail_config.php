@@ -1,0 +1,12 @@
+<?php
+	$TEST_HOSTNAME = '191.0.0.6';
+	$TEST_PORT = 25;
+	$TEST_POP_PORT = 110;
+	$TEST_LOCALHOST = '191.0.0.6';
+	$TEST_AUTH_USER = '';
+	$TEST_AUTH_PASS = '';
+	$TEST_FROM = '';
+	$TEST_TO = '';
+	$TEST_SUBJECT = '';
+	$TEST_BODY = '';
+?>

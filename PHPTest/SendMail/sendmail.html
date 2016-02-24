@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>SendMail to Working</title>
+</head>
+<body>
+<p id="who">null</p>
+<input type="button" value="RecvMail" style="position:fixed; right:500px; top:0" onClick="RecvMail()">
+<input type="button" value="Register" style="position:fixed; right:400px; top:0" onClick="Register()">
+<input type="button" value="ClrRegister" style="position:fixed; right:300px; top:0" onClick="UnRegister()">
+<form action="sendmail.php" method="post" style="position:fixed; top:10">
+	<p>收件人：<input type="text" id="toemail" name="toemail" style="width:250px" /></p>
+	<p>标&nbsp;&nbsp;题：<input type="text" id="title" name="title" style="width:250px"/></p>
+	<p>内&nbsp;&nbsp;容：<textarea id="content" name="content" cols="50" rows="5" style="width:500px; height:350px"></textarea></p>
+	<p><input type="submit" value="发送"  /></p>
+	
+		<script type="text/javascript">
+			function RecvMail()
+			{
+				window.location.href = "recvmail.php";
+			}	
+			
+		    function Register()
+		    {
+		    	window.showModalDialog ('register.html',"","dialogWidth=500px;dialogHeight=500px");
+		    }
+		    
+		    function UnRegister()
+		    {
+		    	delCookie("username");
+		    	delCookie("emailaddr");
+		    	delCookie("passwd");
+		    	alert("cookie cleared");
+		    }
+		     
+		    function delCookie(name)//删除cookie
+		    {
+		        var exp = new Date();
+		        exp.setTime(exp.getTime() - 1);
+		        var cval=getCookie(name);
+		        if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+		    }
+		    
+			function onLoad()
+			{
+				var toAddrBox = document.getElementById("toemail");
+				var titileBox = document.getElementById("title");
+				var contentBox = document.getElementById("content");
+				
+				// set Email to Addr
+				toAddrBox.value = "working@ceiec-electric.com";
+				// set Email Title according to currentTime
+				titileBox.value = setEmailTitle();				
+				contentBox.value = setEmailBody();
+				
+				var who = document.getElementById("who");
+				who.textContent = "Hello, " + getCookie("username");
+				
+			}
+			
+			function setEmailTitle()
+			{
+				var result;
+				var dateObj = new Date();
+				var currentHour = dateObj.getHours();
+				if ((currentHour > 6) & (currentHour < 9))
+				{
+					result = "工作计划[" + dateObj.Format('yyyy-MM-dd') + "]";
+				}
+				else
+				{
+					result = "工作总结[" + dateObj.Format('yyyy-MM-dd') + "]";
+				}
+				
+				return result;
+			}
+			
+			function setEmailBody()
+			{
+				var result = "";
+				var dateObj = new Date();
+				var currentHour = dateObj.getHours();
+				var currentMin = dateObj.getMinutes();
+				var startHour = 18;
+				
+				if (currentHour > startHour)
+				{
+					result = "1、上午工作内容。\r\n2、下午工作内容。\r\n";
+					result = result + "[勤奋时间]" + "[" + startHour + ":00]";
+					if (currentMin > 30)
+					{
+						result = result + "[" + currentHour + ":30]";
+					}
+					else
+					{
+						result = result + "[" + currentHour + ":00]";
+					}
+				}
+				
+				return result;
+			}
+			
+			Date.prototype.Format = function(formatStr)   
+			{   
+			    var str = formatStr;   
+			    var Week = ['日','一','二','三','四','五','六'];  
+			  
+			    str=str.replace(/yyyy|YYYY/,this.getFullYear());   
+			    str=str.replace(/yy|YY/,(this.getYear() % 100)>9?(this.getYear() % 100).toString():'0' + (this.getYear() % 100));   
+			  
+			    str=str.replace(/MM/,(this.getMonth() + 1)>9?(this.getMonth() + 1).toString():'0' + (this.getMonth() + 1));   
+			    str=str.replace(/M/g,(this.getMonth() + 1));   
+			  
+	
+				str=str.replace(/w|W/g,Week[this.getDay()]);   
+			  
+			    str=str.replace(/dd|DD/,this.getDate()>9?this.getDate().toString():'0' + this.getDate());   
+			    str=str.replace(/d|D/g,this.getDate());   
+			  
+			    str=str.replace(/hh|HH/,this.getHours()>9?this.getHours().toString():'0' + this.getHours());   
+			    str=str.replace(/h|H/g,this.getHours());   
+			    str=str.replace(/mm/,this.getMinutes()>9?this.getMinutes().toString():'0' + this.getMinutes());   
+			    str=str.replace(/m/g,this.getMinutes());   
+			  
+			    str=str.replace(/ss|SS/,this.getSeconds()>9?this.getSeconds().toString():'0' + this.getSeconds());   
+			    str=str.replace(/s|S/g,this.getSeconds());   
+			  
+			    return str;   
+			}   
+			
+			
+			function getCookie(sName)
+			{
+				var aCookie = document.cookie.split("; ");
+				for (var i=0; i < aCookie.length; i++)
+				{
+					var aCrumb = aCookie[i].split("=");
+					if (sName == aCrumb[0]) return unescape(aCrumb[1]);
+				}
+				return null;
+			} 
+			  
+			onLoad();
+		</script>
+</form>
+</body>
+</html>
