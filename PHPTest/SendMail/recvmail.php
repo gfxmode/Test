@@ -54,9 +54,8 @@ for($i=0; $i < count($a); $i++)
 	$msgID = $a[$i]["msg_id"];
 	// Get structured headers of message 1
 	$mail_header_obj = $pop3->getParsedHeaders($msgID);
-	// $mail_body_obj = $pop3->getBody($msg_id);
+ 	$mail_body_obj = htmlspecialchars($pop3->getBody($msgID));
 	
-	echo "$mail_body_obj\n";
 	echo "<h2>mail id:$msgID</h2> <pre>\n";
 	echo "From: ";
 	$fromMailAddress = $mail_header_obj['X-WM-AuthUser'];
@@ -82,17 +81,16 @@ for($i=0; $i < count($a); $i++)
 		}
 	}
 	
-	$mail_body = "";
     if ($mail_code == "base64") 
     {
-   		$text = base64_decode("$mail_body");
+   		$text = base64_decode("$mail_body_obj");
  		$text = iconv("$mail_type", "UTF-8", $text);
     }else 
     {
-   		$text = quoted_printable_decode("$mail_body");
+   		$text = "$mail_body_obj";
     	$text = iconv("$mail_type", "UTF-8", $text);
     }
-    // echo htmlspecialchars($mail_body_obj);
+    echo nl2br($text);
 	echo "<hr>";
 }
 
