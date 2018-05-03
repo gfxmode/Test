@@ -43,3 +43,4 @@ lib/*
 *.suo
 object_script.*
 *.pyc
+web.config

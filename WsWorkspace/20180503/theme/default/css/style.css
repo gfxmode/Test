@@ -72,17 +72,17 @@ a:hover {
 }
 /*--header end here-*/
 .banner-bottom {
-    background: url(../images/7.jpg)no-repeat center;
+    background: url(../images/index_1.jpg)no-repeat center;
     background-size: cover;
     max-height: 520px;
 }
 .banner-bottom1 {
-    background: url(../images/6.jpg)no-repeat;
+    background: url(../images/index_2.jpg)no-repeat;
     background-size: cover;
     max-height: 520px;
 }
 .banner-bottom2 {
-    background: url(../images/8.jpg)no-repeat;
+    background: url(../images/index_3.jpg)no-repeat;
     background-size: cover;
     max-height: 520px;
 }

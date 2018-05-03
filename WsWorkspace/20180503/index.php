@@ -38,7 +38,7 @@
 
 <body>
     <link href="./theme/default/css/animate.css" rel="stylesheet" type="text/css" media="all">
-    <script src="../theme/default/js/wow.min.js"></script>
+    <script src="./theme/default/js/wow.min.js"></script>
     <script>
         new WOW().init();
     </script>
