@@ -2,7 +2,7 @@
     require_once('./config/IniHandler.php');
     $objIni = new IniHandler('./config/config.ini');
     function getGlobalKey($in_key) {
-        global $objIni;das
+        global $objIni;
         echo ($objIni->getGlobalKey($in_key));
     }
 ?>
