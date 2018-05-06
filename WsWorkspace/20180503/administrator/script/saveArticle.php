@@ -1,8 +1,7 @@
 <?php
     require_once('../../config/IniHandler.php');
-    include "./include/displayArticle.html";
-
-    $objIni = new ini_File("../../config/config.ini");
+    global $objIni;
+    $objIni = new ini_File('../../config/config.ini');
     $objIni->read();
 
     $objIniArtIdxItem = $objIni->getItem("Art", "maxArtId");
@@ -20,4 +19,7 @@
     $objIniSecArt = $objIni->getSection("Art");
     $objIniSecArt->addItem("Item".$idxLastArt, $artItemValue);
     $objIni->write();
+
+    // include "./include/displayArticleList.html";
+    echo "文章新增成功，请刷新页面";
 ?>

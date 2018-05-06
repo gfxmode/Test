@@ -1,0 +1,43 @@
+<?php
+    function getArticleList() {
+        require_once('../../config/IniHandler.php');
+        global $objIni;
+        $objIniArtIdx = $objIni->getItemValue("Art", "maxArtId");
+
+        $result = "";
+        for ($i = 0; $i < $objIniArtIdx; ++$i) {
+            $objIniItemValue = $objIni->getItemValue("Art", "Item".$i);
+            $arrItem = explode(INI_ART_ITEM_SPLIT_SYMBOL, $objIniItemValue);
+
+            $result .= sprintf("<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                        $i, $arrItem[1], $arrItem[0], sprintf("<a href='../script/displayArticle.php?item=%d' target='myFrameName'>编辑</a>", $i));
+        }
+
+        return $result;
+    };
+?>
+    <html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <input type="button" value="新文章" onclick="myFrameName.location='../script/displayArticle.php?item=add'"/>
+                    <table border="1" cellspacing="0">
+                        <tr>
+                            <th>序号</th>
+                            <th>标题</th>
+                            <th>栏目</th>
+                            <th>操作</th>
+                        </tr>
+                        <?php echo getArticleList() ?>
+                    </table>
+                </td>
+                <td>
+                    <iframe id="myFrameId" name="myFrameName" scrolling="no" frameborder="0" style="width:800px; height:700px; "></iframe>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>

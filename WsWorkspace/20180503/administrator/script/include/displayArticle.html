@@ -1,7 +1,100 @@
+<?php
+    require_once('../../config/IniHandler.php');
+    $objIni = new IniHandler('../../config/config.ini');
+    function getArtCol() {
+        global $objIni;
+        $arrCol = ($objIni->getArtCol());
+        $format = '<option value="%s">%s</option>';
+
+        $strResult = '';
+        foreach ($arrCol as $key => $val) {
+            $strResult .= sprintf($format, $key, $val);
+        }
+
+        echo $strResult;
+    }
+
+    $objIniFile = new ini_File('../../config/config.ini');
+    $objIniFile->read();
+    global $idxItem;
+    $idxItem = $_GET["item"];
+    global $article;
+    global $article_content;
+    $article = [];
+    if (is_numeric($idxItem)) {
+        $objIniItemValue = $objIniFile->getItemValue("Art", "Item".$idxItem);
+        $article = explode(INI_ART_ITEM_SPLIT_SYMBOL, $objIniItemValue);
+        $article_content = file_get_contents("../articles/art_".$idxItem.".html");
+        $article_content = rtrim($article_content, "\r\n");
+    }
+?>
 <html>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/portal/3rd_lib/jquery-easyui/jquery.min.js"></script>
+    <style>
+        body, td, select{
+            font-family: "Microsoft YaHei", Arial, Tahoma, SimSun;
+            font-size: 12px;
+            color: #1d1007;
+            line-height: 24px
+        }
+    </style>
+</head>
 
 <body>
-</body>
+    <form id="detail" action="../script/saveArticle.php" method="post">
+        <table cellspacing="10">
+            <tr>
+                <td colspan="3">
+                    <label>标题:</label>
+                    <input id="title" name="title" style="width: 500px" maxlength="40"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>栏目:</label>
+                    <select id="column" name="column">
+                        <?php echo getArtCol() ?>
+                    </select>
+                </td>
+                <td>
+                    <label>描述:</label>
+                    <input id="description" name="description" style="width: 200px" maxlength="20" />
+                </td>
+                <td>
+                    <label>关键词:</label>
+                    <input id="keywords" name="keywords" style="width: 200px" maxlength="10" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea id="ckeditor" name="ckeditor"></textarea>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="保存">
+    </form>
+    <script>
+        CKEDITOR.replace('ckeditor', {
+            filebrowserUploadUrl: "../script/uploadImg.php?action=address&do=upload'", //设置图片上传请求地址
+            height: 400,
+            width: 900,
+        });
 
+        $(document).ready(function(){
+            var article = <?php echo json_encode($article); ?>;
+            if (article.length < 2) {
+                return;
+            }
+            $("#title").val(article[1]);
+            $("#column").val(article[0]);
+            $("#description").val(article[2]);
+            $("#keywords").val(article[3]);
+
+            CKEDITOR.instances.ckeditor.setData(<?php echo '"'.$article_content.'"';?>);
+        });
+    </script>
+</body>
 </html>
