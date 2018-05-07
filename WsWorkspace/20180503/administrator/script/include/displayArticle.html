@@ -25,7 +25,7 @@
         $objIniItemValue = $objIniFile->getItemValue("Art", "Item".$idxItem);
         $article = explode(INI_ART_ITEM_SPLIT_SYMBOL, $objIniItemValue);
         $article_content = file_get_contents("../articles/art_".$idxItem.".html");
-        $article_content = rtrim($article_content, "\r\n");
+        $article_content = str_replace(array("\r", "\n"), array('', '\n'), addslashes($article_content));
     }
 ?>
 <html>
@@ -44,7 +44,7 @@
 </head>
 
 <body>
-    <form id="detail" action="../script/saveArticle.php" method="post">
+    <form id="detail" action="" method="post">
         <table cellspacing="10">
             <tr>
                 <td colspan="3">
@@ -74,26 +74,37 @@
                 </td>
             </tr>
         </table>
-        <input type="submit" value="保存">
+        <input type="button" value="保存" onclick="onSendArticle()" />
     </form>
     <script>
         CKEDITOR.replace('ckeditor', {
             filebrowserUploadUrl: "../script/uploadImg.php?action=address&do=upload'", //设置图片上传请求地址
             height: 400,
-            width: 900,
+            width: 800,
         });
+
+        function onSendArticle() {
+            var re = /^[0-9]+.?[0-9]*$/;
+            var idxArticle = <?php echo '"'.$idxItem.'"'; ?>;
+            if (re.test(idxArticle)) {
+                detail.action = "saveArticle.php?item="+idxArticle;
+            }
+            else {
+                detail.action = "saveArticle.php?item=add"
+            }
+            detail.submit();
+        };
 
         $(document).ready(function(){
             var article = <?php echo json_encode($article); ?>;
-            if (article.length < 2) {
-                return;
-            }
-            $("#title").val(article[1]);
-            $("#column").val(article[0]);
-            $("#description").val(article[2]);
-            $("#keywords").val(article[3]);
+            if (article.length > 2) {
+                $("#title").val(article[1]);
+                $("#column").val(article[0]);
+                $("#description").val(article[2]);
+                $("#keywords").val(article[3]);
 
-            CKEDITOR.instances.ckeditor.setData(<?php echo '"'.$article_content.'"';?>);
+                CKEDITOR.instances.ckeditor.setData(<?php echo '"'.$article_content.'"';?>);
+            };
         });
     </script>
 </body>

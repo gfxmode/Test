@@ -22,7 +22,7 @@
     <body>
         <table>
             <tr>
-                <td>
+                <td valign="top">
                     <input type="button" value="新文章" onclick="myFrameName.location='../script/displayArticle.php?item=add'"/>
                     <table border="1" cellspacing="0">
                         <tr>
@@ -34,8 +34,8 @@
                         <?php echo getArticleList() ?>
                     </table>
                 </td>
-                <td>
-                    <iframe id="myFrameId" name="myFrameName" scrolling="no" frameborder="0" style="width:800px; height:700px; "></iframe>
+                <td valign="top">
+                    <iframe id="myFrameId" name="myFrameName" scrolling="no" frameborder="0" style="width:900; height:800; "></iframe>
                 </td>
             </tr>
         </table>
