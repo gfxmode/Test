@@ -18,8 +18,8 @@
     file_put_contents("../articles/art_".$idxLastArt.".html", $_POST["ckeditor"]);
 
     // 文章整体配置信息更新
-    $format = "%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%s";
-    $artItemValue = sprintf($format, $_POST["column"], $_POST["title"], $_POST["description"], $_POST["keywords"]);
+    $format = "%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%d";
+    $artItemValue = sprintf($format, $_POST["column"], $_POST["title"], $_POST["description"], $_POST["keywords"], time());
     $objIniSecArt = $objIni->getSection("Art");
     $objIniSecArt->addItem("Item".$idxLastArt, $artItemValue);
     $objIni->write();

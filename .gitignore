@@ -45,8 +45,6 @@ object_script.*
 *.pyc
 web.config
 WsWorkspace/portal
-articles/
-uploadfile/
 .vscode/
 config.ini
 /WsWorkspace/20180503/config/config.ini
