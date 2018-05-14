@@ -5,8 +5,10 @@
     $objIni->read();
 
     $idxArt = $_GET["item"];
+    $idxArtCreateTime = time();
     if (is_numeric($idxArt)) {
         $idxLastArt = $idxArt;
+        $idxArtCreateTime = explode(INI_ART_ITEM_SPLIT_SYMBOL, $objIni->getItemValue("Art", "Item".$idxLastArt))[4];
     }
     else {
         $objIniArtIdxItem = $objIni->getItem("Art", "maxArtId");
@@ -24,7 +26,7 @@
     }
     // 文章整体配置信息更新
     $format = "%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%s".INI_ART_ITEM_SPLIT_SYMBOL."%d".INI_ART_ITEM_SPLIT_SYMBOL."%s";
-    $artItemValue = sprintf($format, $_POST["column"], $_POST["title"], $_POST["description"], $_POST["keywords"], time(), $imgPath);
+    $artItemValue = sprintf($format, $_POST["column"], $_POST["title"], $_POST["description"], $_POST["keywords"], $idxArtCreateTime, $imgPath);
     $objIniSecArt = $objIni->getSection("Art");
     $objIniSecArt->addItem("Item".$idxLastArt, $artItemValue);
     $objIni->write();

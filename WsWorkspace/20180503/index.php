@@ -5,6 +5,43 @@
         global $objIni;
         echo ($objIni->getGlobalKey($in_key));
     }
+
+    $objIniFile = new Ini_File('./config/config.ini');
+    function getNewestArtNum($colName, $maxNum) {
+        global $objIniFile;
+        $objIniFile->read();
+        $numArt = $objIniFile->getItemValue("Art", "maxArtId");
+        $ret = "";
+        $cnt = 0;
+        $retTmplate = '<div class="col-md-3 bann-works">
+                            <a href="%s" target="_blank">
+                                <div class="ban-setting">
+                                    <img src="%s" alt="%s" class="img-responsive">
+                                    <div class="captn">
+                                        <h4>%s</h4>
+                                    </div>
+                                </div>
+                                <h6>%s</h6>
+                            </a>
+                        </div>';
+        for ($i = 0; $i < $numArt; ++$i) {
+            $arrValue = explode(INI_ART_ITEM_SPLIT_SYMBOL, $objIniFile->getItemValue("Art", "Item".($numArt - $i - 1)));
+            $valueCol = $arrValue[0];
+            $valueTitle = $arrValue[1];
+            $valueImg = str_replace('../../', '', $arrValue[5]);
+            if ($valueCol != $colName) {
+                continue;
+            }
+            $tmpStr = sprintf($retTmplate, $valueTitle, $valueImg, $valueTitle, $valueTitle, $valueTitle);
+            $ret .= $tmpStr;
+            $cnt++;
+            if ($cnt >= $maxNum) {
+                break;
+            }
+        }
+
+        return $ret;
+    }
 ?>
 
 <!DOCTYPE HTML>
@@ -52,31 +89,18 @@
                         <li>
                             <div class="banner-bottom">
                                 <div class="container">
-                                    <div class="bann-text">
-                                        <h3>专业</h3>
-                                        <p>丰富的商品车物流运输经验，为您量身打造个性化的轿车托运服务</p>
-                                    </div>
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="banner-bottom1">
                                 <div class="container">
-                                    <div class="bann-text">
-                                        <h3>专注</h3>
-                                        <p>潜心20年的物流经验，用心服务回报客户</p>
-                                        <p></p>
-                                    </div>
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="banner-bottom2">
                                 <div class="container">
-                                    <div class="bann-text">
-                                        <h3>创新</h3>
-                                        <p>打造互联网+物流的现代化服务体系，不断提供更优质服务</p>
-                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -119,21 +143,7 @@
 
     <div class="bann-grid">
         <div class="container">
-            <div class="bann-grid-main">{dede:channelartlist typeid='3'}{dede:arclist channelid='11' row='4' orderby='pubdate' type='image' titlelen='22'
-                }
-                <div class="col-md-3 bann-works">
-                    <a href="[field:arcurl/]" target="_blank">
-                        <div class="ban-setting">
-                            <img src="[field:picname/]" alt="[fullfield:title/]" class="img-responsive">
-                            <div class="captn">
-                                <h4>[field:title/]</h4>
-                            </div>
-                        </div>
-                        <h6>[field:title/]</h6>
-                    </a>
-                </div>
-                {/dede:arclist}{/dede:channelartlist}
-                <div class="clearfix"> </div>
+            <div class="bann-grid-main"><?php echo getNewestArtNum("jcty", 4)?><div class="clearfix"> </div>
             </div>
         </div>
     </div>

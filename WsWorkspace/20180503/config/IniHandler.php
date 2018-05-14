@@ -1,4 +1,13 @@
 <?php
+    // config.ini Art各项说明
+    /**
+     * [0] 栏目名称
+     * [1] 标题名称
+     * [2] 描述
+     * [3] 关键词
+     * [4] 文章日期
+     * [5] 文章首幅图
+     */
     define('INI_ART_ITEM_SPLIT_SYMBOL', '___');  // 定义config.ini中文件配置项分隔符
 
     class IniHandler {
