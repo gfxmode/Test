@@ -42,6 +42,34 @@
 
         return $ret;
     }
+
+    function getNewestFooterArtNum($maxNum) {
+        global $objIniFile;
+        $objIniFile->read();
+        $numArt = $objIniFile->getItemValue("Art", "maxArtId");
+        $ret = "";
+        $cnt = 0;
+        $retTmplate = '<div class="ftr-sub-gd">
+                            <div class="col-md-8 ftr-gd1-text">
+                            <h4><a href="single.html">%s</a></h4>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>';
+        for ($i = 0; $i < $numArt; ++$i) {
+            $arrValue = explode(INI_ART_ITEM_SPLIT_SYMBOL, $objIniFile->getItemValue("Art", "Item".($numArt - $i - 1)));
+            $valueCol = $arrValue[0];
+            $valueTitle = $arrValue[1];
+            $valueImg = str_replace('../../', '', $arrValue[5]);
+            $tmpStr = sprintf($retTmplate, $valueTitle, $valueImg, $valueTitle, $valueTitle, $valueTitle);
+            $ret .= $tmpStr;
+            $cnt++;
+            if ($cnt >= $maxNum) {
+                break;
+            }
+        }
+
+        return $ret;
+    }
 ?>
 
 <!DOCTYPE HTML>
@@ -49,18 +77,18 @@
 
 <head>
     <title><?php getGlobalKey("cfg_webname") ?></title>
-    <link href="./theme/default/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
-    <script src="./theme/default/js/jquery-1.11.0.min.js"></script>
-    <link href="./theme/default/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="/theme/default/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+    <script src="/theme/default/js/jquery-1.11.0.min.js"></script>
+    <link href="/theme/default/css/style.css" rel="stylesheet" type="text/css" media="all" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="<?php getGlobalKey("cfg_webname") ?>" />
     <meta name="description" content="<?php getGlobalKey("cfg_description") ?>" />
     <meta name="author" content="order by adminbuy.cn" />
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-    <script src="./theme/default/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="./theme/default/css/flexslider.css" type="text/css" media="screen" />
-    <script src="./theme/default/js/responsiveslides.min.js"></script>
+    <script src="/theme/default/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/theme/default/css/flexslider.css" type="text/css" media="screen" />
+    <script src="/theme/default/js/responsiveslides.min.js"></script>
     <script>
         $(function () {
             $("#slider2").responsiveSlides({
@@ -74,8 +102,8 @@
 </head>
 
 <body>
-    <link href="./theme/default/css/animate.css" rel="stylesheet" type="text/css" media="all">
-    <script src="./theme/default/js/wow.min.js"></script>
+    <link href="/theme/default/css/animate.css" rel="stylesheet" type="text/css" media="all">
+    <script src="/theme/default/js/wow.min.js"></script>
     <script>
         new WOW().init();
     </script>
@@ -111,7 +139,7 @@
         </div>
     </div>
 
-    <script defer src="./theme/default/js/jquery.flexslider.js"></script>
+    <script defer src="/theme/default/js/jquery.flexslider.js"></script>
     <script type="text/javascript">
         $(function () {
         });
@@ -135,7 +163,7 @@
                     <a href="/jcty/" class="hvr-underline-from-left">更多</a>
                 </div>
                 <div class="col-md-6 fitness-lft zoomIn">
-                    <img src="./theme/default/images/h1.jpg" alt="" class="img-responsive"> </div>
+                    <img src="/theme/default/images/h1.jpg" alt="" class="img-responsive"> </div>
                 <div class="clearfix"> </div>
             </div>
         </div>
@@ -155,10 +183,10 @@
                     <h1>物流运输服务</h1>
                     <p>恒运达提供物流运输服务，承接深圳、东莞、广州、惠州及珠三角地区到全国各地货物运输及物流业务，整车零单均可。专业调派各种平板、高栏、厢式车型、4米、5米、6.2米、6.8米、7.2米、9.6米、13米、17.5米半挂车、5吨、10吨、17吨、25吨、38吨50吨……等货车数百辆，同时可根据客户需求，实行门到门服务。恒运达秉承“安全、准时、快捷、经济”的服务理念，用心为客户创造价值...
                     </p>
-                    <a href="/about/" class="hvr-underline-from-left">更多</a>
+                    <a href="/wlfw/" class="hvr-underline-from-left">更多</a>
                 </div>
                 <div class="col-md-6 fitness-lft zoomIn">
-                    <img src="./theme/default/images/h2.jpg" alt="" class="img-responsive"> </div>
+                    <img src="/theme/default/images/h2.jpg" alt="" class="img-responsive"> </div>
                 <div class="clearfix"> </div>
             </div>
         </div>
@@ -166,19 +194,7 @@
 
     <div class="bann-grid">
         <div class="container">
-            <div class="bann-grid-main"> {dede:arclist typeid='3' row='4' orderby='pubdate' type='image' titlelen='22' }
-                <div class="col-md-3 bann-works">
-                    <a href="[field:arcurl/]" target="_blank">
-                        <div class="ban-setting">
-                            <img src="[field:picname/]" alt="[fullfield:title/]" class="img-responsive">
-                            <div class="captn">
-                                <h4>[field:title/]</h4>
-                            </div>
-                        </div>
-                        <h6>[field:title/]</h6>
-                    </a>
-                </div>
-                {/dede:arclist}
+            <div class="bann-grid-main"><?php echo getNewestArtNum("wlfw", 4)?>
                 <div class="clearfix"> </div>
             </div>
         </div>
