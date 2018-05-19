@@ -44,7 +44,7 @@ lib/*
 object_script.*
 *.pyc
 web.config
-WsWorkspace/portal
+portal/
 .vscode/
 config.ini
 /WsWorkspace/20180503/config/config.ini

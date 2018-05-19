@@ -35,15 +35,36 @@
         return $ret;
     }
 
+    function getFileDigest($idx) {
+        $file_contents = file_get_contents("../../administrator/articles/art_".$idx.".html");
+        $file_text = strip_tags($file_contents);
+        $ret = mb_substr($file_text, 0, 300, "utf-8")."...";
+
+        return $ret;
+    }
+
     function generateArtListItem() {
+        $ret = "";
         $retTpl = '<li>
                         <div class="blog-left">
-                        <p><a href="detail.html" class="title">测试文章</a></p>
-                        <p style="margin-top: 20px">内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示内容显示</p>
-                        <p style="margin-top: 80px"><img src="http://img.php.cn/upload/course/000/000/004/58170f99f2430105.png" >测试<img src="http://img.php.cn/upload/course/000/000/004/58170fbda3f34844.png" style="margin-left: 20px">2016/10/31</p>
+                            <p><a href="%s" class="title">%s</a></p>
+                            <p style="margin-top: 20px">%s</p>
                         </div>
-                        <div class="blog-right"><img src="http://img.php.cn/upload/course/000/000/004/58170bc487acc779.jpg"></div>
+                        <div class="blog-right"><img src="%s"></div>
                     </li>';
+        global $objIniFile;
+        $objIniFile->read();
+        $numArt = $objIniFile->getItemValue("Art", "maxArtId");
+        for ($i = 0; $i < $numArt; ++$i) {
+            $strArt = $objIniFile->getItemValue("Art", "Item".$i);
+            if (strpos($strArt, "jcty") === 0) {
+                $arrArt = explode(INI_ART_ITEM_SPLIT_SYMBOL, $strArt);
+                $tmpStr = sprintf($retTpl, "jcty_".$i.".html", $arrArt[1], getFileDigest($i), $arrArt[5]);
+                $ret .= $tmpStr;
+            }
+        }
+
+        return $ret;
     }
 ?>
 
@@ -64,6 +85,48 @@
     <script src="/theme/default/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/theme/default/css/flexslider.css" type="text/css" media="screen" />
     <script src="/theme/default/js/responsiveslides.min.js"></script>
+    <style>
+        body{
+            background-color: #F0F0F0;
+        }
+        #blog ul{
+            list-style-type: none;
+        }
+        #blog ul li{
+            background-color: white;
+            padding: 20px;
+            width: 100%;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        .blog-left{
+            float: left;
+            width: 800px;
+            overflow: hidden;
+        }
+        .blog-right{
+            float: left;
+            margin-left: 10px;
+            width: 280px;
+            overflow: hidden;
+        }
+        .blog-right img{
+            width: 280px;
+            height: 200px;
+        }
+        .title{
+            text-decoration:none;
+            font-size: 26px;
+        }
+        .blog-left p{
+            color: gray;
+        }
+        .blog-left img{
+            width: 20px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
     <?php include "../../include/head.htm" ?>
@@ -72,6 +135,7 @@
             <?php echo generateArtListItem() ?>
         </ul>
     </div>
+    <div style="margin-top: 20px"></div>
     <?php include "../../include/footer.htm" ?>
 </body>
 </html>
