@@ -44,7 +44,7 @@
     }
 
     function generateArtListItem() {
-        $ret = "";
+        $ret = "<ul>";
         $retTpl = '<li>
                         <div class="blog-left">
                             <p><a href="%s" class="title">%s</a></p>
@@ -59,10 +59,32 @@
             $strArt = $objIniFile->getItemValue("Art", "Item".$i);
             if (strpos($strArt, "wlfw") === 0) {
                 $arrArt = explode(INI_ART_ITEM_SPLIT_SYMBOL, $strArt);
-                $tmpStr = sprintf($retTpl, "wlfw_".$i.".html", $arrArt[1], getFileDigest($i), $arrArt[5]);
+                $tmpStr = sprintf($retTpl, "index.php?idx=".$i, $arrArt[1], getFileDigest($i), $arrArt[5]);
                 $ret .= $tmpStr;
             }
         }
+
+        $ret .= "</ul>";
+
+        return $ret;
+    }
+
+    function generateArtItem($idx) {
+        global $objIniFile;
+        $objIniFile->read();
+        $numArt = $objIniFile->getItemValue("Art", "maxArtId");
+        $arrArt = explode(INI_ART_ITEM_SPLIT_SYMBOL, $objIniFile->getItemValue("Art", "Item".$idx));
+        if ($idx >= $numArt) {
+            return generateArtListItem();
+        }
+        $retTpl = '<h1>%s</h1>
+                    <text>%s</text>
+                    %s';
+        $artTitle = $arrArt[1];
+        $artPubTime = date("Y-m-d H:i:s", $arrArt[4]);
+        $artContent = file_get_contents("../../administrator/articles/art_".$idx.".html");
+
+        $ret = sprintf($retTpl, $artTitle, $artPubTime, $artContent);
 
         return $ret;
     }
@@ -131,9 +153,15 @@
 <body>
     <?php include "../../include/head.htm" ?>
     <div id="blog">
-        <ul>
-            <?php echo generateArtListItem() ?>
-        </ul>
+        <?php
+            if (isset($_GET["idx"])) {
+                $idxArt = $_GET["idx"];
+                echo generateArtItem($idxArt);
+            }
+            else {
+                echo generateArtListItem();
+            }
+        ?>
     </div>
     <div style="margin-top: 20px"></div>
     <?php include "../../include/footer.htm" ?>

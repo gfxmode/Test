@@ -32,7 +32,7 @@
             if ($valueCol != $colName) {
                 continue;
             }
-            $tmpStr = sprintf($retTmplate, $valueTitle, $valueImg, $valueTitle, $valueTitle, $valueTitle);
+            $tmpStr = sprintf($retTmplate, "/a/".$colName."/index.php?idx=".$i, $valueImg, $valueTitle, $valueTitle, $valueTitle);
             $ret .= $tmpStr;
             $cnt++;
             if ($cnt >= $maxNum) {
@@ -51,7 +51,7 @@
         $cnt = 0;
         $retTmplate = '<div class="ftr-sub-gd">
                             <div class="col-md-8 ftr-gd1-text">
-                            <h4><a href="single.html">%s</a></h4>
+                            <h4><a href="%s">%s</a></h4>
                             </div>
                             <div class="clearfix"> </div>
                         </div>';
@@ -60,7 +60,7 @@
             $valueCol = $arrValue[0];
             $valueTitle = $arrValue[1];
             $valueImg = str_replace('../../', '', $arrValue[5]);
-            $tmpStr = sprintf($retTmplate, $valueTitle, $valueImg, $valueTitle, $valueTitle, $valueTitle);
+            $tmpStr = sprintf($retTmplate, "/a/".$valueCol."/index.php?idx=".$i, $valueTitle);
             $ret .= $tmpStr;
             $cnt++;
             if ($cnt >= $maxNum) {
