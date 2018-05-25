@@ -9,7 +9,7 @@
 
     $extension = pathInfo($uploadFilename, PATHINFO_EXTENSION);
     if (in_array($extension, $extensions)) {
-        $uploadPath ="../../uploadfile/";
+        $uploadPath ="/uploadfile/";
         $rdate = date("Ym", time());
         $uploadPath .= $rdate . "/";
         if (!is_dir($uploadPath)) {
